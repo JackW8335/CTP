@@ -114,13 +114,13 @@ using System.Collections.Generic;
                     else
                     { // cut the triangle
 
-                        Cut_this_Face(
-                            new Vector3[] { _victim_mesh.vertices[p1], _victim_mesh.vertices[p2], _victim_mesh.vertices[p3] },
-                            new Vector3[] { _victim_mesh.normals[p1], _victim_mesh.normals[p2], _victim_mesh.normals[p3] },
-                            new Vector2[] { _victim_mesh.uv[p1], _victim_mesh.uv[p2], _victim_mesh.uv[p3] },
-                            new Vector4[] { _victim_mesh.tangents[p1], _victim_mesh.tangents[p2], _victim_mesh.tangents[p3] },
-                            sub);
-                    }
+                    Cut_this_Face(
+                        new Vector3[] { _victim_mesh.vertices[p1], _victim_mesh.vertices[p2], _victim_mesh.vertices[p3] },
+                        new Vector3[] { _victim_mesh.normals[p1], _victim_mesh.normals[p2], _victim_mesh.normals[p3] },
+                        new Vector2[] { _victim_mesh.uv[p1], _victim_mesh.uv[p2], _victim_mesh.uv[p3] },
+                        new Vector4[] { _victim_mesh.tangents[p1], _victim_mesh.tangents[p2], _victim_mesh.tangents[p3] },
+                        sub);
+                }
                 }
             }
 

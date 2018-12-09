@@ -52,41 +52,6 @@ public class Mesh_Maker
         Vector3[] vertices,
         Vector3[] normals,
         Vector2[] uvs,
-        int submesh)
-    {
-
-        int vertCount = _vertices.Count;
-
-        _vertices.Add(vertices[0]);
-        _vertices.Add(vertices[1]);
-        _vertices.Add(vertices[2]);
-
-        _normals.Add(normals[0]);
-        _normals.Add(normals[1]);
-        _normals.Add(normals[2]);
-
-        _uvs.Add(uvs[0]);
-        _uvs.Add(uvs[1]);
-        _uvs.Add(uvs[2]);
-
-        if (_subIndices.Count < submesh + 1)
-        {
-            for (int i = _subIndices.Count; i < submesh + 1; i++)
-            {
-                _subIndices.Add(new List<int>());
-            }
-        }
-
-        _subIndices[submesh].Add(vertCount);
-        _subIndices[submesh].Add(vertCount + 1);
-        _subIndices[submesh].Add(vertCount + 2);
-
-    }
-
-    public void AddTriangle(
-        Vector3[] vertices,
-        Vector3[] normals,
-        Vector2[] uvs,
         Vector4[] tangents,
         int submesh)
     {
