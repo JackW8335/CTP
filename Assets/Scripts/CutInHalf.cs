@@ -22,7 +22,8 @@ public class CutInHalf : MonoBehaviour
             for (int i = 1; i < blades.Length; i++)
             {
                 //make an array of every hit registered by one blade
-                hits = Physics.SphereCastAll(new Ray(blades[i].position, blades[i].forward), 0.5f,MaxDistance);
+                //hits = Physics.SphereCastAll(new Ray(blades[i].position, blades[i].forward), 0.5f,MaxDistance);
+                hits = Physics.BoxCastAll(blades[i].position,new Vector3(0.2f,0.2f,0.2f),blades[i].forward,blades[i].rotation,MaxDistance);
                 Debug.Log(hits.Length);
                 foreach (RaycastHit hit in hits)
                 {
@@ -54,7 +55,7 @@ public class CutInHalf : MonoBehaviour
                             {
                                 //apply drag to pieces to halt the explosion
                                 piece.AddComponent<Rigidbody>();
-                                piece.GetComponent<Rigidbody>().drag = 10.0f;
+                                //piece.GetComponent<Rigidbody>().velocity = Vector3.up * 25.0f;
                             }
                         }
                     }
