@@ -4,58 +4,62 @@ using UnityEngine;
 
 public class CutInHalf : MonoBehaviour
 {
-    public Material capMaterial;
-    //void OnMouseDown()
-    //{
-        
-    //    GameObject[] pieces = MeshCut.Cut(gameObject, transform.position, transform.right, GetComponent<Renderer>().material);
+    private Material capMaterial;
+    public Transform[] blades;
+    private List<GameObject> pieces = new List<GameObject>();
+    RaycastHit[] hits;
+    int MaxDistance = 500;
 
-    //    for (int i = 0; i < pieces.Length; i++)
-    //    {
-    //        if (!pieces[i].GetComponent<BoxCollider>())
-    //            pieces[i].AddComponent<BoxCollider>();
-
-    //        if (!pieces[i].GetComponent<Rigidbody>())
-    //            pieces[i].AddComponent<Rigidbody>();
-    //    }
-    //}
+    void Start()
+    {
+        blades = GetComponentsInChildren<Transform>();
+    }
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
-
-            if(Physics.Raycast(transform.position,transform.forward, out hit))
+            for (int i = 1; i < blades.Length; i++)
             {
-                GameObject[] pieces = MeshCut.Cut(hit.collider.gameObject, transform.position, transform.right, capMaterial);
-
-                for (int i = 0; i < pieces.Length; i++)
+                //make an array of every hit registered by one blade
+                hits = Physics.SphereCastAll(new Ray(blades[i].position, blades[i].forward), 0.5f,MaxDistance);
+                Debug.Log(hits.Length);
+                foreach (RaycastHit hit in hits)
                 {
-                    if (!pieces[i].GetComponent<MeshCollider>())
+                    //For every hit check that it collided with a gameobject
+                    if (hit.collider.gameObject && hit.collider.gameObject.tag == "Destructable")
                     {
-                        pieces[i].AddComponent<MeshCollider>();
-                        pieces[i].GetComponent<MeshCollider>().convex = true;    
-                    }
+                        //Assign the cap material to be the same as the objects material
+                        //Then add the pieces to a list
+                        capMaterial = hit.collider.gameObject.GetComponent<MeshRenderer>().material;
+                        pieces.AddRange(MeshCut.Cut(hit.collider.gameObject, blades[i].position, blades[i].right, capMaterial));
 
-                    if (!pieces[i].GetComponent<Rigidbody>())
-                        pieces[i].AddComponent<Rigidbody>();
+                        for (int j = 1; j < 3; j++)
+                        {
+                            GameObject piece = pieces[pieces.Count - j];
+
+                            if (!piece.GetComponent<MeshCollider>())
+                            {
+                                piece.AddComponent<MeshCollider>();
+                            }
+
+                            piece.GetComponent<MeshCollider>().convex = true;
+
+                            piece.GetComponent<MeshCollider>().sharedMesh = null;
+                            piece.GetComponent<MeshCollider>().sharedMesh = piece.GetComponent<MeshFilter>().mesh;
+
+                            piece.tag = "Destructable";
+
+                            if (!piece.GetComponent<Rigidbody>())
+                            {
+                                //apply drag to pieces to halt the explosion
+                                piece.AddComponent<Rigidbody>();
+                                piece.GetComponent<Rigidbody>().drag = 10.0f;
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-
-
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.green;
-
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 5.0f);
-        Gizmos.DrawLine(transform.position + transform.up * 0.5f, transform.position + transform.up * 0.5f + transform.forward * 5.0f);
-        Gizmos.DrawLine(transform.position + -transform.up * 0.5f, transform.position + -transform.up*0.5f + transform.forward * 5.0f);
-
-        Gizmos.DrawLine(transform.position, transform.position + transform.up * 0.5f);
-        Gizmos.DrawLine(transform.position, transform.position + -transform.up * 0.5f);
     }
 }
