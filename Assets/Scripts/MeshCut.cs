@@ -54,7 +54,7 @@ using System.Collections.Generic;
                 victim.transform.InverseTransformPoint(anchorPoint));
 
             // get the victims mesh
-            _victim_mesh = victim.GetComponent<MeshFilter>().mesh;
+            _victim_mesh = victim.GetComponent<MeshFilter>().sharedMesh;
 
             // reset values
             _new_vertices.Clear();
