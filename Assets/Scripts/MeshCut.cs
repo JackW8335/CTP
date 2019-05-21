@@ -455,9 +455,9 @@ using System.Collections.Generic;
             // you need an axis based on the cap
             Vector3 upward = Vector3.zero;
             // 90 degree turn
-            upward.x = _blade.normal.y;
-            upward.y = -_blade.normal.x;
-            upward.z = _blade.normal.z;
+            upward.x = _blade.normal.y + Random.Range(0,300);
+            upward.y = -_blade.normal.x + Random.Range(0, 300);
+            upward.z = _blade.normal.z + Random.Range(0, 300);
             Vector3 left = Vector3.Cross(_blade.normal, upward);
 
             Vector3 displacement = Vector3.zero;

@@ -41,6 +41,10 @@ public class CutInHalf : MonoBehaviour
 
                             if (!piece.GetComponent<MeshCollider>())
                             {
+                                if (piece.GetComponent<Collider>())
+                                {
+                                    DestroyImmediate(piece.GetComponent<Collider>());
+                                }
                                 piece.AddComponent<MeshCollider>();
                             }
 

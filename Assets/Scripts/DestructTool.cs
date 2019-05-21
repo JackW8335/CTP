@@ -12,6 +12,7 @@ public class DestructTool : EditorWindow
     private Material capMaterial;
     public Transform[] blades;
     private List<GameObject> pieces = new List<GameObject>();
+    private string objectName = "";
     RaycastHit[] hits;
     int MaxDistance = 500;
 
@@ -41,6 +42,10 @@ public class DestructTool : EditorWindow
                     //For every hit check that it collided with a gameobject
                     if (hit.collider.gameObject && hit.collider.gameObject.tag == "Destructable")
                     {
+                        if(objectName == "")
+                        {
+                            objectName = hit.collider.gameObject.name;
+                        }                       
                         //Assign the cap material to be the same as the objects material
                         //Then add the pieces to a list
                         capMaterial = hit.collider.gameObject.GetComponent<MeshRenderer>().sharedMaterial;
@@ -57,8 +62,7 @@ public class DestructTool : EditorWindow
                                 {
                                     DestroyImmediate(piece.GetComponent<Collider>());
                                 }
-                                piece.AddComponent<MeshCollider>();
-                                
+                                piece.AddComponent<MeshCollider>();     
                             }
 
                             piece.GetComponent<MeshCollider>().convex = true;
@@ -66,7 +70,7 @@ public class DestructTool : EditorWindow
                             piece.GetComponent<MeshCollider>().sharedMesh = null;
                             piece.GetComponent<MeshCollider>().sharedMesh = piece.GetComponent<MeshFilter>().sharedMesh;
 
-                            AssetDatabase.CreateAsset(piece.GetComponent<MeshFilter>().sharedMesh, "Assets/Meshes/" + "piece" + (pieces.Count - j) + ".asset");
+                            AssetDatabase.CreateAsset(piece.GetComponent<MeshFilter>().sharedMesh, "Assets/Meshes/" + objectName + (pieces.Count - j) + ".asset");
                             AssetDatabase.SaveAssets();
 
                             piece.tag = "Destructable";
@@ -81,6 +85,7 @@ public class DestructTool : EditorWindow
                     }
                 }
             }
+            objectName = "";
 
         }
         if (GUILayout.Button("Save Prefab"))
